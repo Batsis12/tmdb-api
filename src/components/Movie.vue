@@ -53,11 +53,11 @@ import axios from 'axios';
 import { ref } from "vue";
 import debounce from 'lodash.debounce';
 import moment from 'moment';
-
-
 let search = ref('');
-const discoverMovieURL = "https://api.themoviedb.org/3/discover/movie?api_key=136d55d9c6878da748d19b6aa4870c86";
-const updateMovieURL = "https://api.themoviedb.org/3/search/movie?api_key=136d55d9c6878da748d19b6aa4870c86";
+
+const apiKey = import.meta.env.VITE_API;
+const discoverMovieURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey;
+const updateMovieURL = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey;
 
 export default {
 
