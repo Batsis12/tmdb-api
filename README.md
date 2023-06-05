@@ -5,4 +5,4 @@ This is a single page application which fetches movies from TMDB API and lists t
 ## To Install
 * clone the repo
 * run `npm install`
-* run `npm dev` or `npm run build`
+* run `npm run dev`
