@@ -31,10 +31,9 @@
           <img v-if="movie.poster_path" :src="'https://image.tmdb.org/t/p/w342/' +  movie.poster_path"  alt="{{ movie.title}}" class="object-cover rounded-t-lg" />
           <img v-else src="https://placeholder.pics/svg/342x512/A3A3A3-999999/141512-9C9C9C/No%20Image"  alt="{{ movie.title}}" class="object-cover rounded-t-lg" />
           <div class="p-4">
-            <h2 class="mb-2 text-xs font-semibold">{{ movie.name }}</h2>
-            <!--          <h2 class="mb-2 text-xs font-semibold">{{ movie.title }}</h2>-->
+            <h2 class="mb-2 text-xs font-semibold">{{ movie.title }}</h2>
             <p class="mb-2 text-xs text-gray-700">
-              <!--              Released: {{ format_date(movie.release_date) }}-->
+            Released: {{ format_date(movie.release_date) }}
             </p>
           </div>
         </div>
@@ -57,11 +56,8 @@ import moment from 'moment';
 
 
 let search = ref('');
-const discoverMovieURL = "https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&per_page=100&page=1";
-const updateMovieURL = "https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&per_page=100&page=1";
-
-// const discoverMovieURL = "https://api.themoviedb.org/3/discover/movie?api_key=136d55d9c6878da748d19b6aa4870c86";
-// const updateMovieURL = "https://api.themoviedb.org/3/search/movie?api_key=136d55d9c6878da748d19b6aa4870c86";
+const discoverMovieURL = "https://api.themoviedb.org/3/discover/movie?api_key=136d55d9c6878da748d19b6aa4870c86";
+const updateMovieURL = "https://api.themoviedb.org/3/search/movie?api_key=136d55d9c6878da748d19b6aa4870c86";
 
 export default {
 
@@ -89,9 +85,9 @@ export default {
 
       axios.get(url, { params: params })
           .then(({data}) => {
-            //this.movies = data.results
-            this.movies = data.items;
+            this.movies = data.results;
             this.loading = false;
+            this.lastPage = data.total_pages;
           })
           .catch((err) => {
             console.log(err);
@@ -113,12 +109,12 @@ export default {
   },
   watch: {
     search(value) {
-
       this.page = 1;
+
       if (!value || value.length === 0) {
         this.postURL = discoverMovieURL;
       } else {
-        this.postURL = updateMovieURL
+        this.postURL = updateMovieURL;
       }
       this.fetchData(this.postURL, {'page': this.page, 'query': value});
     },
