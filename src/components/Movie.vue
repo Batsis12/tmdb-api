@@ -22,17 +22,17 @@
         </p>
       </div>
     </div>
-    <div v-else class="py-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 px-10">
+    <div v-else class="py-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-5 px-5">
       <div class="item error" v-if="search&&!movies.length">
         <p>No results found!</p>
       </div>
       <div v-for="movie in movies" :key="movie">
-        <div class="rounded-lg bg-white shadow-lg">
+        <div class="rounded-lg bg-gray-100 shadow-lg">
           <img v-if="movie.poster_path" :src="'https://image.tmdb.org/t/p/w342/' +  movie.poster_path"  alt="{{ movie.title}}" class="object-cover rounded-t-lg" />
           <img v-else src="https://placeholder.pics/svg/342x512/A3A3A3-999999/141512-9C9C9C/No%20Image"  alt="{{ movie.title}}" class="object-cover rounded-t-lg" />
           <div class="p-4">
-            <h2 class="mb-2 text-xs font-semibold">{{ movie.title }}</h2>
-            <p class="mb-2 text-xs text-gray-700">
+            <h2 class="mb-0 text-xs font-semibold">{{ movie.title }}</h2>
+            <p class="mb-2 mt-0 text-xs text-gray-700">
             Released: {{ format_date(movie.release_date) }}
             </p>
           </div>
@@ -51,7 +51,7 @@
 <script>
 import axios from 'axios';
 import { ref } from "vue";
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 import moment from 'moment';
 
 
@@ -70,7 +70,8 @@ export default {
       loading: false,
       search: '',
       postURL: '',
-      lastPage: 11234556
+      lastPage: 100,
+      debounce: null
     }
   },
   mounted() {
@@ -116,7 +117,11 @@ export default {
       } else {
         this.postURL = updateMovieURL;
       }
-      this.fetchData(this.postURL, {'page': this.page, 'query': value});
+      clearTimeout(this.debounce);
+      this.debounce = setTimeout(() => {
+        // TODO: Implement Caching
+        this.fetchData(this.postURL, {'page': this.page, 'query': value});
+      }, 600)
     },
     page(value) {
       var queryString = {'page': value};
